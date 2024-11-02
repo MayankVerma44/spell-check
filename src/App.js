@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
 
-function App() {
+const customDictionary = {
+  teh: "the",
+  wrok: "work",
+  fot: "for",
+  exampl: "example"
+};
+
+const XSpellCheck = () => {
+  const [text, setText] = useState('');
+  const [suggestion, setSuggestion] = useState('');
+
+  const checkSpelling = (input) => {
+    const words = input.split(' ');
+    for (let word of words) {
+      const lowerCaseWord = word.toLowerCase();
+      if (customDictionary[lowerCaseWord]) {
+        return `Did you mean: ${customDictionary[lowerCaseWord]}?`;
+      }
+    }
+    return '';
+  };
+
+  const handleChange = (event) => {
+    const inputText = event.target.value;
+    setText(inputText);
+    setSuggestion(checkSpelling(inputText));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Spell Check and Auto Correction</h1>
+      <textarea
+        value={text}
+        onChange={handleChange}
+        placeholder="Type here..."
+      />
+      {suggestion && <div>{suggestion}</div>}
     </div>
   );
-}
+};
 
-export default App;
+export default XSpellCheck;
